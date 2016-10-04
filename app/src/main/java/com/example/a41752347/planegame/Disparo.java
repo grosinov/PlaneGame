@@ -9,7 +9,7 @@ public class Disparo {
     CCPoint PosicionInicial;
     CCPoint PosicionFinal;
 
-    public Disparo(int y, int x) {
+    public Disparo(int y, int x, int PosFin) {
         disparo = Sprite.sprite("Disparo.png");
         PosicionInicial = new CCPoint();
         PosicionFinal = new CCPoint();
@@ -18,7 +18,7 @@ public class Disparo {
         PosicionInicial.y = y;
 
         PosicionFinal.y = PosicionInicial.y;
-        PosicionFinal.x=0;
+        PosicionFinal.x = PosFin;
         disparo.runAction(MoveTo.action(3, PosicionFinal.x, PosicionFinal.y));
     }
 

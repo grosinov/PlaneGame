@@ -5,6 +5,8 @@ import android.view.MotionEvent;
 
 import org.cocos2d.actions.interval.ScaleBy;
 import org.cocos2d.layers.Layer;
+import org.cocos2d.menus.Menu;
+import org.cocos2d.menus.MenuItemImage;
 import org.cocos2d.nodes.Director;
 import org.cocos2d.nodes.Scene;
 import org.cocos2d.nodes.Sprite;
@@ -19,17 +21,18 @@ public class clsJuego {
     CCGLSurfaceView VistaDelJuego;
     CCSize TamañoPantalla;
     Avion avion;
-    Disparo disparo;
     Sprite fondo;
     int vida;
     int enemyTags = 0;
 
     ArrayList<AvionEnemigo> arrEnemigos;
+    ArrayList<Disparo> arrDisparos;
 
     public clsJuego(CCGLSurfaceView vp){
         VistaDelJuego = vp;
         avion = new Avion();
         arrEnemigos = new ArrayList<>();
+        arrDisparos = new ArrayList<>();
 
         vida = 3;
     }
@@ -70,18 +73,30 @@ public class clsJuego {
     class CapaDeFrente extends Layer {
         public CapaDeFrente() {
             this.setIsTouchEnabled(true);
+            Menu MenuDeBotones;
+            MenuItemImage BotonDisparo;
+
+            BotonDisparo = MenuItemImage.item("BotonDisparo.png", "BotonDisparo.png", this, "PresionaBotonDisparo");
+            MenuDeBotones = Menu.menu(BotonDisparo);
+            MenuDeBotones.setPosition(TamañoPantalla.width - BotonDisparo.getWidth(), 0 + BotonDisparo.getHeight() / 2 + 50);
+            super.addChild(MenuDeBotones);
             TimerTask TareaPonerEnemigos = new TimerTask() {
                 @Override
                 public void run() {
-                    //Preguntar por pantalla tocada
-                    disparo = new Disparo(Math.round(avion.getPosicionInicial().x), Math.round(avion.getPosicionInicial().y));
                     AvionEnemigo aven =  new AvionEnemigo(Math.round(TamañoPantalla.width), Math.round(TamañoPantalla.height));
                     arrEnemigos.add(aven);
                     addChild(aven.getAvionenemigo(),1,enemyTags);
                     enemyTags++;
 
+
                     for(int i = 0; i < arrEnemigos.size(); i++){
                         aven = arrEnemigos.get(i);
+                        for(Disparo disp : arrDisparos){
+                            System.out.println(arrDisparos.size());
+                            if(Colision(aven.getAvionenemigo(), disp.getDisparo())){
+                                arrEnemigos.remove(i);
+                            }
+                        }
                         if(aven.getAvionenemigo().getPositionX() == 0){
                             removeChild(aven.getAvionenemigo().getTag(), true);
                             arrEnemigos.remove(i);
@@ -91,8 +106,6 @@ public class clsJuego {
                             }
                         }
                     }
-                    DetectarColision();
-
                 }
             };
 
@@ -129,14 +142,9 @@ public class clsJuego {
         public boolean ccTouchesEnded(MotionEvent event) {
             return true;
         }
-    }
 
-    void DetectarColision(){
-        for(int i = 0; i <= arrEnemigos.size()-1; i++){
-            AvionEnemigo aven = arrEnemigos.get(i);
-            if(Colision(aven.getAvionenemigo(), disparo.getDisparo())){
-                arrEnemigos.remove(i);
-            }
+        public void PresionaBotonDisparo() {
+            arrDisparos.add(new Disparo(Math.round(avion.getAvion().getPositionX()), Math.round(avion.getAvion().getPositionY()), Math.round(TamañoPantalla.width)));
         }
     }
 
@@ -176,8 +184,6 @@ public class clsJuego {
                 EstaEntre(Sprite1Ab, Sprite2Ab, Sprite2Ar)){
             Devolver = true;
         }
-
-        //asasdasdasd
 
         if(EstaEntre(Sprite2I, Sprite1I, Sprite1D) &&
                 EstaEntre(Sprite2Ab, Sprite1Ab, Sprite1Ar)){
