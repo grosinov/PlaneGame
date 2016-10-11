@@ -1,5 +1,6 @@
 package com.example.a41752347.planegame;
 
+import android.hardware.camera2.params.MeteringRectangle;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -23,7 +24,8 @@ public class clsJuego {
     Avion avion;
     Sprite fondo;
     int vida;
-    int enemyTags = 0;
+    int enemyTags = 1;
+    int dispTags = 100000;
 
     ArrayList<AvionEnemigo> arrEnemigos;
     ArrayList<Disparo> arrDisparos;
@@ -73,35 +75,43 @@ public class clsJuego {
     class CapaDeFrente extends Layer {
         public CapaDeFrente() {
             this.setIsTouchEnabled(true);
-            Menu MenuDeBotones;
             MenuItemImage BotonDisparo;
 
-            BotonDisparo = MenuItemImage.item("BotonDisparo.png", "BotonDisparo.png", this, "PresionaBotonDisparo");
-            MenuDeBotones = Menu.menu(BotonDisparo);
-            MenuDeBotones.setPosition(TamañoPantalla.width - BotonDisparo.getWidth(), 0 + BotonDisparo.getHeight() / 2 + 50);
-            super.addChild(MenuDeBotones);
+            BotonDisparo = MenuItemImage.item("BotonDisparo.png", "avion.png", this, "PresionaBotonDisparo");
+            BotonDisparo.setPosition(TamañoPantalla.width - BotonDisparo.getWidth(), 0 + BotonDisparo.getHeight() / 2 + 50);
+            super.addChild(BotonDisparo);
+
             TimerTask TareaPonerEnemigos = new TimerTask() {
                 @Override
                 public void run() {
-                    AvionEnemigo aven =  new AvionEnemigo(Math.round(TamañoPantalla.width), Math.round(TamañoPantalla.height));
+                    AvionEnemigo aven = new AvionEnemigo(Math.round(TamañoPantalla.width), Math.round(TamañoPantalla.height));
                     arrEnemigos.add(aven);
-                    addChild(aven.getAvionenemigo(),1,enemyTags);
+                    addChild(aven.getAvionenemigo(), 1, enemyTags);
                     enemyTags++;
-
-
-                    for(int i = 0; i < arrEnemigos.size(); i++){
+                    for (int i = 0; i < arrEnemigos.size(); i++) {
                         aven = arrEnemigos.get(i);
-                        for(Disparo disp : arrDisparos){
-                            System.out.println(arrDisparos.size());
-                            if(Colision(aven.getAvionenemigo(), disp.getDisparo())){
-                                arrEnemigos.remove(i);
+                        for (int j = 0; j < arrDisparos.size(); j++) {
+                            Disparo disp = arrDisparos.get(j);
+                            if (disp != null) {
+                                if (disp.Colision(aven.getAvenColision())) {
+                                    Log.d("asdasd", "Colisiono XD");
+                                    removeChild(aven.getAvionenemigo().getTag(), true);
+                                    arrEnemigos.remove(i);
+                                    removeChild(disp.getDisparo().getTag(), true);
+                                    arrDisparos.remove(j);
+                                } else {
+                                    if (disp.getDisparo().getPositionX() >= TamañoPantalla.width) {
+                                        removeChild(disp.getDisparo().getTag(), true);
+                                        arrDisparos.remove(j);
+                                    }
+                                }
                             }
                         }
-                        if(aven.getAvionenemigo().getPositionX() == 0){
+                        if (aven.getAvionenemigo().getPositionX() == 0) {
                             removeChild(aven.getAvionenemigo().getTag(), true);
                             arrEnemigos.remove(i);
                             vida--;
-                            if(vida == 0){
+                            if (vida == 0) {
                                 //perdio
                             }
                         }
@@ -117,6 +127,12 @@ public class clsJuego {
 
         @Override
         public boolean ccTouchesBegan(MotionEvent event) {
+            if(event.getX() > TamañoPantalla.width / 2){
+                Disparo disp = new Disparo(Math.round(avion.getAvion().getPositionX()), Math.round(avion.getAvion().getPositionY()), Math.round(TamañoPantalla.width));
+                arrDisparos.add(disp);
+                addChild(disp.getDisparo(), 1, dispTags);
+                dispTags++;
+            }
             return true;
         }
 
@@ -127,8 +143,10 @@ public class clsJuego {
             int suavisadordemovimiento = 20;
             movimientovertical = movimientovertical / suavisadordemovimiento;
             if(event.getX() < TamañoPantalla.getWidth() / 2){
-                if(avion.getAvion().getPositionY() <= 0 || avion.getAvion().getPositionY() >= TamañoPantalla.getHeight()){
-                    PosicionFinalY = avion.getAvion().getPositionY();
+                if(avion.getAvion().getPositionY() <= 0){
+                    PosicionFinalY = avion.getAvion().getPositionY() +1;
+                } else if (avion.getAvion().getPositionY() >= TamañoPantalla.getHeight()){
+                    PosicionFinalY = avion.getAvion().getPositionY() -1;
                 } else {
                     PosicionFinalY = avion.getAvion().getPositionY() + movimientovertical;
                 }
@@ -142,88 +160,5 @@ public class clsJuego {
         public boolean ccTouchesEnded(MotionEvent event) {
             return true;
         }
-
-        public void PresionaBotonDisparo() {
-            arrDisparos.add(new Disparo(Math.round(avion.getAvion().getPositionX()), Math.round(avion.getAvion().getPositionY()), Math.round(TamañoPantalla.width)));
-        }
-    }
-
-    boolean Colision(Sprite sprite1, Sprite sprite2){
-        boolean Devolver;
-        Devolver = false;
-
-        int Sprite1I, Sprite1D, Sprite1Ab, Sprite1Ar;
-        int Sprite2I, Sprite2D, Sprite2Ab, Sprite2Ar;
-
-        Sprite1I = (int) (sprite1.getPositionX() - sprite1.getWidth()/2);
-        Sprite1D = (int) (sprite1.getPositionX() + sprite1.getWidth()/2);
-        Sprite1Ab = (int) (sprite1.getPositionY() - sprite1.getHeight()/2);
-        Sprite1Ar = (int) (sprite1.getPositionY() - sprite1.getHeight()/2);
-
-        Sprite2I = (int) (sprite2.getPositionX() - sprite2.getWidth()/2);
-        Sprite2D = (int) (sprite2.getPositionX() - sprite2.getWidth()/2);
-        Sprite2Ab = (int) (sprite2.getPositionY() - sprite2.getHeight()/2);
-        Sprite2Ar = (int) (sprite2.getPositionY() - sprite2.getHeight()/2);
-
-        if(EstaEntre(Sprite1I, Sprite2I, Sprite2D) &&
-                EstaEntre(Sprite1Ab, Sprite2Ab, Sprite2Ar)){
-            Devolver = true;
-        }
-
-        if(EstaEntre(Sprite1I, Sprite2I, Sprite2D) &&
-                EstaEntre(Sprite1Ar, Sprite2Ab, Sprite2Ar)){
-            Devolver = true;
-        }
-
-        if(EstaEntre(Sprite1D, Sprite2I, Sprite2D) &&
-                EstaEntre(Sprite1Ar, Sprite2Ab, Sprite2Ar)){
-            Devolver = true;
-        }
-
-        if(EstaEntre(Sprite1D, Sprite2I, Sprite2D) &&
-                EstaEntre(Sprite1Ab, Sprite2Ab, Sprite2Ar)){
-            Devolver = true;
-        }
-
-        if(EstaEntre(Sprite2I, Sprite1I, Sprite1D) &&
-                EstaEntre(Sprite2Ab, Sprite1Ab, Sprite1Ar)){
-            Devolver = true;
-        }
-
-        if(EstaEntre(Sprite2I, Sprite1I, Sprite1D) &&
-                EstaEntre(Sprite2Ar, Sprite1Ab, Sprite1Ar)){
-            Devolver = true;
-        }
-
-        if(EstaEntre(Sprite2D, Sprite1I, Sprite1D) &&
-                EstaEntre(Sprite2Ar, Sprite1Ab, Sprite1Ar)){
-            Devolver = true;
-        }
-
-        if(EstaEntre(Sprite2D, Sprite1I, Sprite1D) &&
-                EstaEntre(Sprite2Ab, Sprite1Ab, Sprite1Ar)){
-            Devolver = true;
-        }
-
-        return Devolver;
-    }
-
-    boolean EstaEntre(int NumeroAComparar, int Menor, int Mayor){
-        boolean Devolver;
-
-        if(Menor > Mayor){
-            int Auxiliar;
-            Auxiliar=Mayor;
-            Mayor = Menor;
-            Menor = Auxiliar;
-        }
-
-        if(NumeroAComparar >= Menor && NumeroAComparar <= Mayor){
-            Devolver = true;
-        } else {
-            Devolver = false;
-        }
-
-        return Devolver;
     }
 }
