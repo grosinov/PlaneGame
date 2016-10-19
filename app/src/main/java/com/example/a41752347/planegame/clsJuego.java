@@ -24,6 +24,7 @@ public class clsJuego {
     Avion avion;
     Sprite fondo;
     int vida;
+    int puntos = 0;
     int enemyTags = 1;
     int dispTags = 100000;
 
@@ -90,29 +91,32 @@ public class clsJuego {
                     enemyTags++;
                     for (int i = 0; i < arrEnemigos.size(); i++) {
                         aven = arrEnemigos.get(i);
-                        for (int j = 0; j < arrDisparos.size(); j++) {
-                            Disparo disp = arrDisparos.get(j);
-                            if (disp != null) {
-                                if (disp.Colision(aven.getAvenColision())) {
-                                    Log.d("asdasd", "Colisiono XD");
-                                    removeChild(aven.getAvionenemigo().getTag(), true);
-                                    arrEnemigos.remove(i);
-                                    removeChild(disp.getDisparo().getTag(), true);
-                                    arrDisparos.remove(j);
-                                } else {
-                                    if (disp.getDisparo().getPositionX() >= TamañoPantalla.width) {
+                        if(aven != null){
+                            for (int j = 0; j < arrDisparos.size(); j++) {
+                                Disparo disp = arrDisparos.get(j);
+                                if (disp != null) {
+                                    if (disp.Colision(aven.getAvenColision())) {
+                                        Log.d("asdasd", "Colisiono XD");
+                                        removeChild(aven.getAvionenemigo().getTag(), true);
+                                        arrEnemigos.remove(i);
                                         removeChild(disp.getDisparo().getTag(), true);
                                         arrDisparos.remove(j);
+                                        puntos++;
+                                    } else {
+                                        if (disp.getDisparo().getPositionX() >= TamañoPantalla.width) {
+                                            removeChild(disp.getDisparo().getTag(), true);
+                                            arrDisparos.remove(j);
+                                        }
                                     }
                                 }
                             }
-                        }
-                        if (aven.getAvionenemigo().getPositionX() == 0) {
-                            removeChild(aven.getAvionenemigo().getTag(), true);
-                            arrEnemigos.remove(i);
-                            vida--;
-                            if (vida == 0) {
-                                //perdio
+                            if (aven.getAvionenemigo().getPositionX() == 0) {
+                                removeChild(aven.getAvionenemigo().getTag(), true);
+                                arrEnemigos.remove(i);
+                                vida--;
+                                if (vida == 0) {
+                                    //perdio
+                                }
                             }
                         }
                     }
