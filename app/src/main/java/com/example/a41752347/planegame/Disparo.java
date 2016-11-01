@@ -1,7 +1,6 @@
 package com.example.a41752347.planegame;
 
 import android.graphics.Rect;
-import android.hardware.camera2.params.MeteringRectangle;
 
 import org.cocos2d.actions.interval.MoveTo;
 import org.cocos2d.nodes.Sprite;
@@ -9,7 +8,7 @@ import org.cocos2d.types.CCPoint;
 
 public class Disparo {
     Sprite disparo;
-    Rect dispColision;
+     Rect dispColision;
     CCPoint PosicionInicial;
     CCPoint PosicionFinal;
 
@@ -17,7 +16,7 @@ public class Disparo {
         disparo = Sprite.sprite("Disparo.png");
         PosicionInicial = new CCPoint();
         PosicionFinal = new CCPoint();
-        dispColision = new Rect(Math.round(disparo.getHeight()), Math.round(disparo.getWidth()), Math.round(disparo.getHeight()), Math.round(disparo.getWidth()));
+        dispColision = new Rect(Math.round(disparo.getPositionX()), Math.round(disparo.getPositionY()), Math.round(disparo.getPositionX() + disparo.getWidth()), Math.round(disparo.getPositionY() + disparo.getHeight()));
 
         PosicionInicial.x = x;
         PosicionInicial.y = y;

@@ -1,12 +1,10 @@
 package com.example.a41752347.planegame;
 
-import android.hardware.camera2.params.MeteringRectangle;
 import android.util.Log;
 import android.view.MotionEvent;
 
 import org.cocos2d.actions.interval.ScaleBy;
 import org.cocos2d.layers.Layer;
-import org.cocos2d.menus.Menu;
 import org.cocos2d.menus.MenuItemImage;
 import org.cocos2d.nodes.Director;
 import org.cocos2d.nodes.Scene;
@@ -165,4 +163,57 @@ public class clsJuego {
             return true;
         }
     }
+
+    /*boolean InterseccionEntreSprites (Sprite Sprite1, Sprite Sprite2) {
+
+        boolean Devolver;
+        Devolver=false;
+
+        int Sprite1Izquierda, Sprite1Derecha, Sprite1Abajo, Sprite1Arriba;
+        int Sprite2Izquierda, Sprite2Derecha, Sprite2Abajo, Sprite2Arriba;
+        Sprite1Izquierda=(int) (Sprite1.getPositionX() - Sprite1.getWidth()/2);
+        Sprite1Derecha=(int) (Sprite1.getPositionX() + Sprite1.getWidth()/2);
+        Sprite1Abajo=(int) (Sprite1.getPositionY() - Sprite1.getHeight()/2);
+        Sprite1Arriba=(int) (Sprite1.getPositionY() + Sprite1.getHeight()/2);
+        Sprite2Izquierda=(int) (Sprite2.getPositionX() - Sprite2.getWidth()/2);
+        Sprite2Derecha=(int) (Sprite2.getPositionX() + Sprite2.getWidth()/2);
+        Sprite2Abajo=(int) (Sprite2.getPositionY() - Sprite2.getHeight()/2);
+        Sprite2Arriba=(int) (Sprite2.getPositionY() + Sprite2.getHeight()/2);
+
+        if (EstaEntre(Sprite1Izquierda, Sprite2Izquierda, Sprite2Derecha) &&
+        EstaEntre(Sprite1Abajo, Sprite2Abajo, Sprite2Arriba)) {
+            Devolver = true;
+
+        }
+        if (EstaEntre(Sprite1Izquierda, Sprite2Izquierda, Sprite2Derecha) &&
+        EstaEntre(Sprite1Arriba, Sprite2Abajo, Sprite2Arriba)) {
+            Devolver = true;
+        }
+        if (EstaEntre(Sprite1Derecha, Sprite2Izquierda, Sprite2Derecha) &&
+        EstaEntre(Sprite1Arriba, Sprite2Abajo, Sprite2Arriba)) {
+            Devolver=true;
+        }
+        if (EstaEntre(Sprite1Derecha, Sprite2Izquierda, Sprite2Derecha) &&
+        EstaEntre(Sprite1Abajo, Sprite2Abajo, Sprite2Arriba)) {
+            Devolver=true;
+        }
+        if (EstaEntre(Sprite2Izquierda, Sprite1Izquierda, Sprite1Derecha) &&
+        EstaEntre(Sprite2Abajo, Sprite1Abajo, Sprite1Arriba)) {
+            Devolver=true;
+        }
+        if (EstaEntre(Sprite2Izquierda, Sprite1Izquierda, Sprite1Derecha) &&
+        EstaEntre(Sprite2Arriba, Sprite1Abajo, Sprite1Arriba)) {
+            Devolver=true;
+        }
+        if (EstaEntre(Sprite2Derecha, Sprite1Izquierda, Sprite1Derecha) &&
+        EstaEntre(Sprite2Arriba, Sprite1Abajo, Sprite1Arriba)) {
+            Devolver=true;
+        }
+        if (EstaEntre(Sprite2Derecha, Sprite1Izquierda, Sprite1Derecha) &amp;&amp;
+        EstaEntre(Sprite2Abajo, Sprite1Abajo, Sprite1Arriba)) {
+            Devolver=true;
+        }
+
+        return Devolver;
+    }*/
 }

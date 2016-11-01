@@ -19,7 +19,7 @@ public class AvionEnemigo {
         avionenemigo = Sprite.sprite("AvionEnemigo.png");
         PosicionInicial = new CCPoint();
         PosicionFinal = new CCPoint();
-        avenColision = new Rect(Math.round(avionenemigo.getHeight()), Math.round(avionenemigo.getWidth()), Math.round(avionenemigo.getHeight()), Math.round(avionenemigo.getWidth()));
+        avenColision = new Rect(Math.round(avionenemigo.getPositionX()), Math.round(avionenemigo.getPositionY()), Math.round(avionenemigo.getPositionX() + avionenemigo.getWidth()), Math.round(avionenemigo.getPositionY() + avionenemigo.getHeight()));
         rand = new Random();
 
         PosicionInicial.x = x;
