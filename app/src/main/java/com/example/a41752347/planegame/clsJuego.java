@@ -87,12 +87,23 @@ public class clsJuego {
                     arrEnemigos.add(aven);
                     addChild(aven.getAvionenemigo(), 1, enemyTags);
                     enemyTags++;
+                }
+            };
+
+            Timer RelojEnemigos = new Timer();
+            RelojEnemigos.schedule(TareaPonerEnemigos, 0, 2000);
+
+            TimerTask TareaDetectarColisiones = new TimerTask() {
+                @Override
+                public void run() {
                     for (int i = 0; i < arrEnemigos.size(); i++) {
-                        aven = arrEnemigos.get(i);
+                        AvionEnemigo aven = arrEnemigos.get(i);
                         if(aven != null){
                             for (int j = 0; j < arrDisparos.size(); j++) {
                                 Disparo disp = arrDisparos.get(j);
                                 if (disp != null) {
+                                    aven.getAvenColision().set(Math.round(aven.getAvionenemigo().getPositionX()), Math.round(aven.getAvionenemigo().getPositionY()), Math.round(aven.getAvionenemigo().getPositionX() + aven.getAvionenemigo().getWidth()), Math.round(aven.getAvionenemigo().getPositionY() + aven.getAvionenemigo().getHeight()));
+                                    disp.getDispColision().set(Math.round(disp.getDisparo().getPositionX()), Math.round(disp.getDisparo().getPositionY()), Math.round(disp.getDisparo().getPositionX() + disp.getDisparo().getWidth()), Math.round(disp.getDisparo().getPositionY() + disp.getDisparo().getHeight()));
                                     if (disp.Colision(aven.getAvenColision())) {
                                         Log.d("asdasd", "Colisiono XD");
                                         removeChild(aven.getAvionenemigo().getTag(), true);
@@ -121,8 +132,8 @@ public class clsJuego {
                 }
             };
 
-            Timer RelojEnemigos = new Timer();
-            RelojEnemigos.schedule(TareaPonerEnemigos, 0, 1000);
+            Timer RelojColision = new Timer();
+            RelojColision.schedule(TareaDetectarColisiones, 0, 1);
 
             super.addChild(avion.getAvion());
         }

@@ -29,6 +29,11 @@ public class Disparo {
         disparo.runAction(MoveTo.action(3, PosicionFinal.x, PosicionFinal.y));
     }
 
+    public Rect getDispColision() {
+        dispColision.set(Math.round(disparo.getPositionX()), Math.round(disparo.getPositionY()), Math.round(disparo.getPositionX() + disparo.getWidth()), Math.round(disparo.getPositionY() + disparo.getHeight()));
+        return dispColision;
+    }
+
     public Sprite getDisparo() {
         return disparo;
     }
