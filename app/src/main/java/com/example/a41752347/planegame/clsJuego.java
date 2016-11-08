@@ -7,6 +7,7 @@ import org.cocos2d.actions.interval.ScaleBy;
 import org.cocos2d.layers.Layer;
 import org.cocos2d.menus.MenuItemImage;
 import org.cocos2d.nodes.Director;
+import org.cocos2d.nodes.Label;
 import org.cocos2d.nodes.Scene;
 import org.cocos2d.nodes.Sprite;
 import org.cocos2d.opengl.CCGLSurfaceView;
@@ -21,6 +22,9 @@ public class clsJuego {
     CCSize TamañoPantalla;
     Avion avion;
     Sprite fondo;
+    Sprite vida1;
+    Sprite vida2;
+    Sprite vida3;
     int vida;
     int puntos = 0;
     int enemyTags = 1;
@@ -95,6 +99,21 @@ public class clsJuego {
             BotonDisparo = MenuItemImage.item("BotonDisparo.png", "avion.png", this, "PresionaBotonDisparo");
             BotonDisparo.setPosition(TamañoPantalla.width - BotonDisparo.getWidth(), 0 + BotonDisparo.getHeight() / 2 + 50);
             super.addChild(BotonDisparo);
+            vida1 = Sprite.sprite("Vida.png");
+            vida2 = Sprite.sprite("Vida.png");
+            vida3 = Sprite.sprite("Vida.png");
+
+            vida1.setPosition(0 + vida1.getWidth() / 2, 0 + vida1.getHeight() / 2);
+            vida1.runAction(ScaleBy.action(0.01f, 0.5f, 0.5f));
+            super.addChild(vida1, 1, 0);
+
+            vida2.setPosition(vida1.getPositionX() + vida1.getWidth(), 0 + vida2.getHeight() / 2);
+            vida2.runAction(ScaleBy.action(0.01f, 0.5f, 0.5f));
+            super.addChild(vida2, 1, 0);
+
+            vida3.setPosition(vida2.getPositionX() + vida2.getWidth(), 0 + vida3.getHeight() / 2);
+            vida3.runAction(ScaleBy.action(0.01f, 0.5f, 0.5f));
+            super.addChild(vida3, 1, 0);
 
             TimerTask TareaPonerEnemigos = new TimerTask() {
                 @Override
@@ -139,7 +158,12 @@ public class clsJuego {
                                 removeChild(aven.getAvionenemigo().getTag(), true);
                                 arrEnemigos.remove(i);
                                 vida--;
-                                if (vida == 0) {
+                                if (vida == 2) {
+                                    removeChild(vida3.getTag(), true);
+                                } else if(vida == 1){
+                                    removeChild(vida2.getTag(), true);
+                                } else if(vida == 0){
+                                    removeChild(vida1.getTag(), true);
                                     Director.sharedDirector().runWithScene(EscenaPerdio());
                                 }
                             }
@@ -202,18 +226,18 @@ public class clsJuego {
 
     class CapaFrentePerdio extends Layer {
         public CapaFrentePerdio(){
+            Label labelScore = Label.label("Has Perdido!","Arial" ,20);
         }
 
         @Override
         public boolean ccTouchesBegan(MotionEvent event) {
-
+            Director.sharedDirector().runWithScene(Escena());
+            vida = 3;
             return true;
         }
 
         @Override
         public boolean ccTouchesMoved(MotionEvent event) {
-            Director.sharedDirector().runWithScene(Escena());
-            vida = 3;
             return true;
         }
 
