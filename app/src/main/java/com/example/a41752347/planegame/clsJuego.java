@@ -186,7 +186,6 @@ public class clsJuego {
                     }
                     if(puntos >= 5 && puntos <= 10) {
                         if (tiempo == 5) {
-                            Log.d("puntaje", "puntaje supero 10");
                             PonerEnemigo();
                         }
                     }
@@ -377,6 +376,7 @@ public class clsJuego {
         public boolean ccTouchesBegan(MotionEvent event) {
             vida = 3;
             puntos = 0;
+            tiempo = 0;
             Director.sharedDirector().replaceScene(Escena());
 
             return true;
