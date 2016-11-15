@@ -32,12 +32,14 @@ public class clsJuego {
     int puntos = 0;
     int enemyTags = 1;
     int dispTags = 100000;
-    int tiempo = 6000;
+    int tiempo = 0;
     Label Title;
     Label Toca;
     Label puntaje;
     Label puntaje2;
     CCColor3B black;
+
+    AvionEnemigo aven;
 
     ArrayList<AvionEnemigo> arrEnemigos;
     ArrayList<Disparo> arrDisparos;
@@ -171,59 +173,58 @@ public class clsJuego {
             vida3.runAction(ScaleBy.action(0.01f, 0.5f, 0.5f));
             super.addChild(vida3, 1, 200002);
 
+            puntaje = Label.label("" + puntos,"Verdana" ,100);
+
             TimerTask TareaPonerEnemigos = new TimerTask() {
                 @Override
                 public void run() {
-                    AvionEnemigo aven = new AvionEnemigo(Math.round(TamañoPantalla.width), Math.round(TamañoPantalla.height));
-                    arrEnemigos.add(aven);
-                    addChild(aven.getAvionenemigo(), 1, enemyTags);
-                    enemyTags++;
+                    tiempo++;
+                    if(puntos >= 0 && puntos <= 5) {
+                        if (tiempo == 6) {
+                            PonerEnemigo();
+                        }
+                    }
+                    if(puntos >= 5 && puntos <= 10) {
+                        if (tiempo == 5) {
+                            Log.d("puntaje", "puntaje supero 10");
+                            PonerEnemigo();
+                        }
+                    }
+                    if(puntos >= 10 && puntos <= 15) {
+                        if (tiempo == 4) {
+                            PonerEnemigo();
+                        }
+                    }
+                    if(puntos >= 15 && puntos <= 20) {
+                        if (tiempo == 3) {
+                            PonerEnemigo();
+                        }
+                    }
+                    if(puntos >= 20 && puntos <= 25) {
+                        if (tiempo == 2) {
+                            PonerEnemigo();
+                        }
+                    }
+                    if(puntos >= 25) {
+                        if (tiempo == 1) {
+                            PonerEnemigo();
+                        }
+                    }
+                    Log.d("asd", "" + tiempo);
                 }
             };
 
             Timer RelojEnemigos = new Timer();
-            RelojEnemigos.schedule(TareaPonerEnemigos, 0, tiempo);
-            switch (puntos){
-                case 10:
-                    tiempo = 5500;
-                    break;
-                case 20:
-                    tiempo = 5000;
-                    break;
-                case 30:
-                    tiempo = 4500;
-                    break;
-                case 40:
-                    tiempo = 4000;
-                    break;
-                case 50:
-                    tiempo = 3500;
-                    break;
-                case 60:
-                    tiempo = 3000;
-                    break;
-                case 70:
-                    tiempo = 2500;
-                    break;
-                case 80:
-                    tiempo = 2000;
-                    break;
-                case 90:
-                    tiempo = 1500;
-                    break;
-                case 100:
-                    tiempo = 1000;
-                    break;
-            }
-            puntaje = Label.label("" + puntos,"Verdana" ,100);
+            RelojEnemigos.schedule(TareaPonerEnemigos, 0, 1000);
+
+            puntaje.setColor(black);
+            puntaje.setPosition(0 + puntaje.getWidth() + 20, TamañoPantalla.height - puntaje.getHeight() - 20);
+            addChild(puntaje);
 
             TimerTask TareaDetectarColisiones = new TimerTask() {
                 @Override
                 public void run() {
                     puntaje.setString("" + puntos);
-                    puntaje.setColor(black);
-                    puntaje.setPosition(0 + puntaje.getWidth() + 20, TamañoPantalla.height - puntaje.getHeight() - 20);
-                    addChild(puntaje);
 
                     for (int i = 0; i < arrEnemigos.size(); i++) {
                         AvionEnemigo aven = arrEnemigos.get(i);
@@ -234,17 +235,11 @@ public class clsJuego {
                                     aven.getAvenColision().set(Math.round(aven.getAvionenemigo().getPositionX()), Math.round(aven.getAvionenemigo().getPositionY()), Math.round(aven.getAvionenemigo().getPositionX() + aven.getAvionenemigo().getWidth()), Math.round(aven.getAvionenemigo().getPositionY() + aven.getAvionenemigo().getHeight()));
                                     disp.getDispColision().set(Math.round(disp.getDisparo().getPositionX()), Math.round(disp.getDisparo().getPositionY()), Math.round(disp.getDisparo().getPositionX() + disp.getDisparo().getWidth()), Math.round(disp.getDisparo().getPositionY() + disp.getDisparo().getHeight()));
                                     if (disp.Colision(aven.getAvenColision())) {
-                                        Log.d("asdasd", "Colisiono XD");
                                         removeChild(aven.getAvionenemigo().getTag(), true);
                                         arrEnemigos.remove(i);
                                         removeChild(disp.getDisparo().getTag(), true);
                                         arrDisparos.remove(j);
                                         puntos++;
-                                    } else {
-                                        if (disp.getDisparo().getPositionX() >= TamañoPantalla.width) {
-                                            removeChild(disp.getDisparo().getTag(), true);
-                                            arrDisparos.remove(j);
-                                        }
                                     }
                                 }
                             }
@@ -261,11 +256,21 @@ public class clsJuego {
                                         break;
                                     case 0:
                                         removeChild(200000, true);
+                                        tiempo = 0;
                                         Director.sharedDirector().replaceScene(EscenaPerdio());
                                         break;
                                 }
                             }
                         }
+                    }
+                    for(Disparo disp : arrDisparos) {
+                        if(disp != null){
+                            if (disp.getDisparo().getPositionX() >= TamañoPantalla.width) {
+                                removeChild(disp.getDisparo().getTag(), true);
+                                arrDisparos.remove(disp);
+                            }
+                        }
+
                     }
                 }
             };
@@ -274,6 +279,16 @@ public class clsJuego {
             RelojColision.schedule(TareaDetectarColisiones, 0, 1);
 
             super.addChild(avion.getAvion());
+
+
+        }
+
+        private void PonerEnemigo() {
+            aven = new AvionEnemigo(Math.round(TamañoPantalla.width), Math.round(TamañoPantalla.height));
+            arrEnemigos.add(aven);
+            addChild(aven.getAvionenemigo(), 1, enemyTags);
+            enemyTags++;
+            tiempo = 0;
         }
 
         @Override
@@ -355,13 +370,15 @@ public class clsJuego {
             puntaje2.setPosition(TamañoPantalla.width / 2, TamañoPantalla.height / 2 - 200);
             addChild(puntaje2);
 
-            puntos = 0;
+
         }
 
         @Override
         public boolean ccTouchesBegan(MotionEvent event) {
-            Director.sharedDirector().replaceScene(Escena());
             vida = 3;
+            puntos = 0;
+            Director.sharedDirector().replaceScene(Escena());
+
             return true;
         }
 
