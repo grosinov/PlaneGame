@@ -181,35 +181,26 @@ public class clsJuego {
                 public void run() {
                     tiempo++;
                     if(puntos >= 0 && puntos <= 5) {
-                        if (tiempo == 6) {
-                            PonerEnemigo();
-                        }
-                    }
-                    if(puntos >= 5 && puntos <= 10) {
-                        if (tiempo == 5) {
-                            PonerEnemigo();
-                        }
-                    }
-                    if(puntos >= 10 && puntos <= 15) {
                         if (tiempo == 4) {
                             PonerEnemigo();
                         }
                     }
-                    if(puntos >= 15 && puntos <= 20) {
+                    if(puntos >= 5 && puntos <= 10) {
                         if (tiempo == 3) {
                             PonerEnemigo();
                         }
                     }
-                    if(puntos >= 20 && puntos <= 25) {
+                    if(puntos >= 10 && puntos <= 15) {
                         if (tiempo == 2) {
                             PonerEnemigo();
                         }
                     }
-                    if(puntos >= 25) {
+                    if(puntos >= 15 && puntos <= 20) {
                         if (tiempo == 1) {
                             PonerEnemigo();
                         }
                     }
+
                     Log.d("asd", "" + tiempo);
                 }
             };
@@ -379,6 +370,7 @@ public class clsJuego {
             vida = 3;
             puntos = 0;
             tiempo = 0;
+            arrEnemigos.clear();
             Director.sharedDirector().replaceScene(Escena());
 
             return true;
