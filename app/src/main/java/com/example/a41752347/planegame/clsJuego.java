@@ -157,6 +157,7 @@ public class clsJuego {
             BotonDisparo = MenuItemImage.item("BotonDisparo.png", "avion.png", this, "PresionaBotonDisparo");
             BotonDisparo.setPosition(TamañoPantalla.width - BotonDisparo.getWidth(), 0 + BotonDisparo.getHeight() / 2 + 50);
             super.addChild(BotonDisparo);
+
             vida1 = Sprite.sprite("Vida.png");
             vida2 = Sprite.sprite("Vida.png");
             vida3 = Sprite.sprite("Vida.png");
@@ -262,7 +263,8 @@ public class clsJuego {
                             }
                         }
                     }
-                    for(Disparo disp : arrDisparos) {
+                    for(int i=0; i< arrDisparos.size(); i++) {
+                        Disparo disp = arrDisparos.get(i);
                         if(disp != null){
                             if (disp.getDisparo().getPositionX() >= TamañoPantalla.width) {
                                 removeChild(disp.getDisparo().getTag(), true);

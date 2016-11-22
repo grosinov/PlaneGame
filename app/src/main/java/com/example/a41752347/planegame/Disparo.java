@@ -16,7 +16,7 @@ public class Disparo {
         disparo = Sprite.sprite("Disparo.png");
         PosicionInicial = new CCPoint();
         PosicionFinal = new CCPoint();
-        dispColision = new Rect(Math.round(disparo.getPositionX()), Math.round(disparo.getPositionY()), Math.round(disparo.getPositionX() + disparo.getWidth()), Math.round(disparo.getPositionY() + disparo.getHeight()));
+        dispColision = new Rect();
 
         PosicionInicial.x = x;
         PosicionInicial.y = y;
@@ -30,7 +30,7 @@ public class Disparo {
     }
 
     public Rect getDispColision() {
-        dispColision.set(Math.round(disparo.getPositionX()), Math.round(disparo.getPositionY()), Math.round(disparo.getPositionX() + disparo.getWidth()), Math.round(disparo.getPositionY() + disparo.getHeight()));
+        dispColision.set(Math.round(disparo.getPositionX() - disparo.getWidth()/2), Math.round(disparo.getPositionY() - disparo.getHeight()/2), Math.round(disparo.getPositionX() + disparo.getWidth()/2), Math.round(disparo.getPositionY() + disparo.getHeight()/2));
         return dispColision;
     }
 
